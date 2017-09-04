@@ -1,3 +1,21 @@
 rent_bike_homepage:
     path:     /
     defaults: { _controller: RentBikeBundle:Default:index }
+
+rent_bike_user:
+    path:     /user
+    defaults: { _controller: RentBikeBundle:User:resolveRoute }
+
+rent_bike_list_user:
+    path:     /user/list
+    defaults: { _controller: RentBikeBundle:User:list}
+
+rent_bike_user_id:
+    path:     /user/{id}
+    defaults: { _controller: RentBikeBundle:User:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_user_update:
+    path:  /user/{id}
+    defaults: { _controller: RentBikeBundle:User:update }
+    methods:  [PUT]
