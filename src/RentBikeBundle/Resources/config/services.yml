@@ -1,0 +1,4 @@
+services:
+#    rent_bike.example:
+#        class: RentBikeBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

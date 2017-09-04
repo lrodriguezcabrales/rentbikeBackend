@@ -1,0 +1,3 @@
+rent_bike_homepage:
+    path:     /
+    defaults: { _controller: RentBikeBundle:Default:index }

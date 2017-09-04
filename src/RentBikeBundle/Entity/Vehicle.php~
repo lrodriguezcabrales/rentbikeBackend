@@ -1,0 +1,80 @@
+<?php
+
+namespace RentBikeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Vehicle
+ * @ORM\Entity
+ * @ORM\Table(name="vehicle")
+ */
+class Vehicle
+{
+    /**
+     * @ORM\Column(type="guid")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="UUID")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $code;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $entrydate;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastupdate;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $amount;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $numAvailable;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $numBusy;
+
+    /**
+     * @ORM\Column(type="float", length=100)
+     */
+    private $price;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="RentBikeBundle\Entity\AttributeList",cascade={"persist"})
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
+     */
+    private $state;
+
+    /**
+     * Many Groups have Many Users.
+     * @ORM\ManyToMany(targetEntity="RentBikeBundle\Entity\Reserve", mappedBy="vehicles")
+     */
+    private $reserves;
+}
