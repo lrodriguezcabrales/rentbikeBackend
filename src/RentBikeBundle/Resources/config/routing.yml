@@ -1,3 +1,7 @@
+rent_bike_main_client:
+    resource: "@RentBikeBundle/Resources/config/client/routing.yml"
+    prefix:   /client
+
 rent_bike_homepage:
     path:     /
     defaults: { _controller: RentBikeBundle:Default:index }

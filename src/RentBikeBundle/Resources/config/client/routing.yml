@@ -1,0 +1,17 @@
+rent_bike_Client:
+    path:     /
+    defaults: { _controller: RentBikeBundle:Client:resolveRoute }
+
+rent_bike_list_Client:
+    path:     /list
+    defaults: { _controller: RentBikeBundle:Client:list}
+
+rent_bike_Client_id:
+    path:     /{id}
+    defaults: { _controller: RentBikeBundle:Client:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_Client_update:
+    path:  /{id}
+    defaults: { _controller: RentBikeBundle:Client:update }
+    methods:  [PUT]
