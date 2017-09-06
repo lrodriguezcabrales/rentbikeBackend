@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Client
  *
  * @ORM\Table(name="client")
- * @ORM\Entity(repositoryClass="RentBikeBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="RentBikeBundle\Repository\ClientRepository")
  */
 class Client
 {
@@ -33,7 +33,7 @@ class Client
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $firstaname;
+    private $firstname;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -49,6 +49,11 @@ class Client
      * @ORM\Column(type="string", length=100, nullable = true)
      */
     private $secondlastname;
+
+    /**
+     * @ORM\Column(type="string", length=100, unique=true)
+     */
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -72,6 +77,27 @@ class Client
      */
     private $identificationType;
 
+    public function __construct()
+    {
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(){
+        $this->lastupdate = new \DateTime();
+    }
+
 
 
     /**
@@ -82,78 +108,6 @@ class Client
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fullname
-     *
-     * @param string $fullname
-     *
-     * @return Client
-     */
-    public function setFullname($fullname)
-    {
-        $this->fullname = $fullname;
-
-        return $this;
-    }
-
-    /**
-     * Get fullname
-     *
-     * @return string
-     */
-    public function getFullname()
-    {
-        return $this->fullname;
-    }
-
-    /**
-     * Set identificationNumber
-     *
-     * @param string $identificationNumber
-     *
-     * @return Client
-     */
-    public function setIdentificationNumber($identificationNumber)
-    {
-        $this->identificationNumber = $identificationNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get identificationNumber
-     *
-     * @return string
-     */
-    public function getIdentificationNumber()
-    {
-        return $this->identificationNumber;
-    }
-
-    /**
-     * Set identificationType
-     *
-     * @param \RentBikeBundle\Entity\AttributeList $identificationType
-     *
-     * @return Client
-     */
-    public function setIdentificationType(\RentBikeBundle\Entity\AttributeList $identificationType)
-    {
-        $this->identificationType = $identificationType;
-
-        return $this;
-    }
-
-    /**
-     * Get identificationType
-     *
-     * @return \RentBikeBundle\Entity\AttributeList
-     */
-    public function getIdentificationType()
-    {
-        return $this->identificationType;
     }
 
     /**
@@ -205,27 +159,27 @@ class Client
     }
 
     /**
-     * Set firstaname
+     * Set firstname
      *
-     * @param string $firstaname
+     * @param string $firstname
      *
      * @return Client
      */
-    public function setFirstaname($firstaname)
+    public function setFirstname($firstname)
     {
-        $this->firstaname = $firstaname;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
     /**
-     * Get firstaname
+     * Get firstname
      *
      * @return string
      */
-    public function getFirstaname()
+    public function getFirstname()
     {
-        return $this->firstaname;
+        return $this->firstname;
     }
 
     /**
@@ -301,6 +255,30 @@ class Client
     }
 
     /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Client
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
      * Set password
      *
      * @param string $password
@@ -322,5 +300,77 @@ class Client
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Set fullname
+     *
+     * @param string $fullname
+     *
+     * @return Client
+     */
+    public function setFullname($fullname)
+    {
+        $this->fullname = $fullname;
+
+        return $this;
+    }
+
+    /**
+     * Get fullname
+     *
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->fullname;
+    }
+
+    /**
+     * Set identificationNumber
+     *
+     * @param string $identificationNumber
+     *
+     * @return Client
+     */
+    public function setIdentificationNumber($identificationNumber)
+    {
+        $this->identificationNumber = $identificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get identificationNumber
+     *
+     * @return string
+     */
+    public function getIdentificationNumber()
+    {
+        return $this->identificationNumber;
+    }
+
+    /**
+     * Set identificationType
+     *
+     * @param \RentBikeBundle\Entity\AttributeList $identificationType
+     *
+     * @return Client
+     */
+    public function setIdentificationType(\RentBikeBundle\Entity\AttributeList $identificationType)
+    {
+        $this->identificationType = $identificationType;
+
+        return $this;
+    }
+
+    /**
+     * Get identificationType
+     *
+     * @return \RentBikeBundle\Entity\AttributeList
+     */
+    public function getIdentificationType()
+    {
+        return $this->identificationType;
     }
 }

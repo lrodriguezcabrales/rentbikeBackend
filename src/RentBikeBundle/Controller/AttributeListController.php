@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use RentBikeBundle\Entity\User;
+use RentBikeBundle\Entity\AttributeList;
 
-class UserController extends Controller
+class AttributeListController extends Controller
 {
     public function indexAction()
     {
@@ -62,7 +62,7 @@ class UserController extends Controller
 	{
 		$em = $this->get("doctrine")->getManager();
 
-		$query = $em->createQuery('SELECT u FROM RentBikeBundle:User u');
+		$query = $em->createQuery('SELECT u FROM RentBikeBundle:AttributeList u');
 
         $data = $query->getArrayResult();   
 
@@ -75,7 +75,7 @@ class UserController extends Controller
         $em = $this->get("doctrine")->getManager();
 
         if(!is_null($id)){
-            $query = $em->createQuery("SELECT u FROM RentBikeBundle:User u
+            $query = $em->createQuery("SELECT u FROM RentBikeBundle:AttributeList u
                 WHERE u.id='".$id."'");
         }
 
@@ -102,55 +102,47 @@ class UserController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        print_r($data);
 
-        $userSearch = $em->getRepository('RentBikeBundle:User')->findOneBy(array('email'=>$data['email']));
+        $search = $em->getRepository('RentBikeBundle:AttributeList')->findOneBy(array('value'=>$data['value']));
 
-        echo "\nCount ".count($userSearch)."\n";
+        // echo "\nCount ".count($search)."\n";
 
-        if(count($userSearch) > 0){
-           	$response = array('status'=> 200, 'msj' =>'Ya existe un usuario registrado con este email');
+        if(count($search) > 0){
+           	$response = array('status'=> 200, 'msj' =>'Ya existe un atributo registrado con este valor');
         }else{
-            echo "\nNuevo\n";
-            try {
-                $user = new User();
 
+            try {
+                $attributeList = new AttributeList();
                 
-                $user->setFirstname($data['firstname']);
-                $user->setLastname($data['lastname']);
-                $user->setSecondname($data['secondname']);
-                $user->setSecondlastname($data['secondlastname']);
-                $user->setEmail($data['email']);
-                $user->setPassword($data['password']);
+                $attributeList->setContent($data['content']);
+                $attributeList->setAttributeName($data['attributeName']);
+                $attributeList->setValue($data['value']);
                 
                 
-                $em->persist($user);
-                $em->flush($user);
+                $em->persist($attributeList);
+                $em->flush($attributeList);
 
             } catch (\Exception $e) {
                 print $e->getMessage();
             }
 
-            
-
         }
 	
-       
+        $search = $em->getRepository('RentBikeBundle:AttributeList')->findOneBy(array('value'=>$data['value']));
 
-        // $userSearch = $em->getRepository('RentBikeBundle:User')->findOneBy(array('email'=>$data['email']));
+        // echo "\nCount ".count($search)."\n";
 
-        // if($userSearch){
+        if(count($search) > 0){
+                        
+            $response = array('status'=> 200, 'msj' =>'Atributo creado exitosamente');
             
-        //     $response = array('status'=> 200, 'msj' =>'Usuario creado exitosamente');
-            
-        //     return new JsonResponse($response);
+            return new JsonResponse($response);
 
-        // }else{
-        //     //$response = array('status'=> 500, 'msj' =>'Ha ocurrido un error');
-        //     throw $this->createNotFoundException('Error al crear el usuario');
-        // }
+        }else{
+            //$response = array('status'=> 500, 'msj' =>'Ha ocurrido un error');
+            throw $this->createNotFoundException('Error al crear el usuario');
+        }
 
-        return new JsonResponse(array());
 	}
 
     /**
@@ -167,7 +159,7 @@ class UserController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $userSearch = $em->getRepository('RentBikeBundle:User')->find($id);
+        $userSearch = $em->getRepository('RentBikeBundle:AttributeList')->find($id);
 
         if($userSearch){
            
