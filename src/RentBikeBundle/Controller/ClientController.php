@@ -67,9 +67,9 @@ class ClientController extends Controller
 		// return new JsonResponse(array('total' => count($data), 'data' => $data));
 
         $data = $this->getDoctrine() ->getRepository(Client::class)->findAllOrderedByName();
-
+        // echo ""
         return new JsonResponse(array('total' => count($data), 'data' => $data));
-
+        echo "jajjajaja";
 	}
 
     public function getOneAction($id = null) 
