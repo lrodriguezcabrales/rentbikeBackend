@@ -1,6 +1,6 @@
-rent_bike_main_client:
-    resource: "@RentBikeBundle/Resources/config/client/routing.yml"
-    prefix:   /client
+# rent_bike_main_client:
+#     resource: "@RentBikeBundle/Resources/config/client/routing.yml"
+#     prefix:   /client
 
 rent_bike_homepage:
     path:     /
@@ -23,3 +23,42 @@ rent_bike_user_update:
     path:  /user/{id}
     defaults: { _controller: RentBikeBundle:User:update }
     methods:  [PUT]
+
+######## Client
+rent_bike_client:
+    path:     /client
+    defaults: { _controller: RentBikeBundle:Client:resolveRoute }
+
+rent_bike_list_client:
+    path:     /client/list
+    defaults: { _controller: RentBikeBundle:Client:list}
+
+rent_bike_client_id:
+    path:     /client/{id}
+    defaults: { _controller: RentBikeBundle:Client:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_client_update:
+    path:  /client/{id}
+    defaults: { _controller: RentBikeBundle:Client:update }
+    methods:  [PUT]
+
+######## AttributeList
+rent_bike_attributelist:
+    path:     /attributelist
+    defaults: { _controller: RentBikeBundle:AttributeList:resolveRoute }
+
+rent_bike_list_attributelist:
+    path:     /attributelist/list
+    defaults: { _controller: RentBikeBundle:AttributeList:list}
+
+rent_bike_attributelist_id:
+    path:     /attributelist/{id}
+    defaults: { _controller: RentBikeBundle:AttributeList:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_attributelist_update:
+    path:  /attributelist/{id}
+    defaults: { _controller: RentBikeBundle:AttributeList:update }
+    methods:  [PUT]
+

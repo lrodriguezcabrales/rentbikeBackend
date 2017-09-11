@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * AttributeList
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RentBikeBundle\Repository\AttributeListRepository")
  * @ORM\Table(name="attributelist")
  */
 class AttributeList

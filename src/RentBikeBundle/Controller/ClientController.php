@@ -19,6 +19,7 @@ class ClientController extends Controller
 
     public function resolveRouteAction(Request $request)
     {
+
         $method = $request->getMethod();
 
         switch($method)
@@ -59,12 +60,16 @@ class ClientController extends Controller
 	{
 		$em = $this->get("doctrine")->getManager();
 
-		$query = $em->createQuery('SELECT c FROM RentBikeBundle:Client c');
+		// $query = $em->createQuery('SELECT c, a FROM RentBikeBundle:Client c
+  //           LEFT JOIN RentBikeBundle:AttributeList a WITH c.identificationType = a.id');
+  //       $data = $query->getArrayResult();   
 
-        $data = $query->getArrayResult();   
+		// return new JsonResponse(array('total' => count($data), 'data' => $data));
 
-		return new JsonResponse(array('total' => count($data), 'data' => $data));
-
+        $data = $this->getDoctrine() ->getRepository(Client::class)->findAllOrderedByName();
+        // echo ""
+        return new JsonResponse(array('total' => count($data), 'data' => $data));
+        echo "jajjajaja";
 	}
 
     public function getOneAction($id = null) 
@@ -88,6 +93,7 @@ class ClientController extends Controller
 	 */
 	public function saveAction()
 	{
+
 		$em = $this->get("doctrine")->getManager();
 
 		$request = $this->container->get('request_stack')->getCurrentRequest();
@@ -101,44 +107,54 @@ class ClientController extends Controller
 
         $searchClient = $em->getRepository('RentBikeBundle:Client')->findOneBy(array('email'=>$data['email']));
 
-        if($searchClient){
+        if(count($searchClient) > 0){
            	$response = array('status'=> 200, 'msj' =>'Ya existe un cliente registrado con este email');
-        }
-	
-        if(count($data) > 0){
-        	
-        	$client = new Client();
+        }else{
+            
+            $client = new Client();
 
-        	$client->setEmail($data['email']);
-        	$client->setPassword($data['password']);
-        	$client->setFirstname($data['firstname']);
-        	$client->setLastname($data['lastname']);
-        	$client->setSecondname($data['secondname']);
-        	$client->setSecondlastname($data['secondlastname']);
-        		
+            $client->setEmail($data['email']);
+            $client->setPassword($data['password']);
+            $client->setFirstname($data['firstname']);
+            $client->setLastname($data['lastname']);
+            $client->setSecondname($data['secondname']);
+            $client->setSecondlastname($data['secondlastname']);
+                
             $fullname = $data['firstname'];
+
+            // echo "\n".$fullname;
+
             if(strlen($data['secondname']) > 0){
-                $fullname += $data['secondname'];
+                $fullname .= ' '.$data['secondname'];
             }
             if(strlen($data['lastname']) > 0){
-                $fullname += $data['lastname'];
+                $fullname .= ' '.$data['lastname'];
             }
             if(strlen($data['secondlastname']) > 0){
-                $fullname += $data['secondlastname'];
+                $fullname .= ' '.$data['secondlastname'];
             }
 
-        	$client->setFullname($fullname);
+            // echo "\nfullname";
+            // echo "\n".$fullname;
+
+            $client->setFullname($fullname);
 
             $client->setIdentificationNumber($data['identificationNumber']);
 
-            //$client->setIdentificationType($data['identificationNumber']);
+            if(!is_null($data['identificationType'])){
 
+                $identificationType = $em->getRepository('RentBikeBundle:AttributeList')->findOneBy(array('id'=>$data['identificationType']));
 
-        	$em->persist($client);
-        	$em->flush();
+                $client->setIdentificationType($identificationType);
+            }else{
+                throw new \Exception("Tipo de identificacion obligatorio", 1);
+            }
 
+            $em->persist($client);
+            $em->flush();
         }
-
+	
+       
         $searchClient = $em->getRepository('RentBikeBundle:Client')->findOneBy(array('email'=>$data['email']));
 
         if($searchClient){

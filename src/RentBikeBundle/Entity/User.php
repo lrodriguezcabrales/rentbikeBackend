@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="guid")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="UUID")
      */
     private $id;
 
@@ -30,7 +30,7 @@ class User
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $firstaname;
+    private $firstname;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -47,7 +47,6 @@ class User
      */
     private $secondlastname;
 
-
     /**
      * @ORM\Column(type="string", length=100, unique=true)
      */
@@ -59,10 +58,34 @@ class User
     private $password;
 
 
+    public function __construct()
+    {
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(){
+        $this->lastupdate = new \DateTime();
+    }
+
+
+
+
     /**
      * Get id
      *
-     * @return integer
+     * @return guid
      */
     public function getId()
     {
@@ -118,27 +141,27 @@ class User
     }
 
     /**
-     * Set firstaname
+     * Set firstname
      *
-     * @param string $firstaname
+     * @param string $firstname
      *
      * @return User
      */
-    public function setFirstaname($firstaname)
+    public function setFirstname($firstname)
     {
-        $this->firstaname = $firstaname;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
     /**
-     * Get firstaname
+     * Get firstname
      *
      * @return string
      */
-    public function getFirstaname()
+    public function getFirstname()
     {
-        return $this->firstaname;
+        return $this->firstname;
     }
 
     /**
@@ -211,6 +234,30 @@ class User
     public function getSecondlastname()
     {
         return $this->secondlastname;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**
