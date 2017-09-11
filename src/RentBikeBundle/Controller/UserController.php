@@ -91,6 +91,8 @@ class UserController extends Controller
 	 */
 	public function saveAction()
 	{
+
+        echo "jajaja";
 		$em = $this->get("doctrine")->getManager();
 
 		$request = $this->container->get('request_stack')->getCurrentRequest();
@@ -107,9 +109,12 @@ class UserController extends Controller
         if($userSearch){
            	$response = array('status'=> 200, 'msj' =>'Ya existe un usuario registrado con este email');
         }
-	
+	    print_r($data);
+        
         if(count($data) > 0){
         	
+            echo "ajjajajja";
+
         	$user = new User();
 
         	$user->setEmail($data['email']);
@@ -118,28 +123,27 @@ class UserController extends Controller
         	$user->setLastname($data['lastname']);
         	$user->setSecondname($data['secondname']);
         	$user->setSecondlastname($data['secondlastname']);
-        		
-        	//$user->setType($data['type']);
+        	
 
         	$em->persist($user);
         	$em->flush();
 
         }
 
-        $userSearch = $em->getRepository('RentBikeBundle:User')->findOneBy(array('email'=>$data['email']));
+        // $userSearch = $em->getRepository('RentBikeBundle:User')->findOneBy(array('email'=>$data['email']));
 
-        if($userSearch){
+        // if($userSearch){
             
-            $response = array('status'=> 200, 'msj' =>'Usuario creado exitosamente');
+        //     $response = array('status'=> 200, 'msj' =>'Usuario creado exitosamente');
             
-            return new JsonResponse($response);
+        //     return new JsonResponse($response);
 
-        }else{
-            //$response = array('status'=> 500, 'msj' =>'Ha ocurrido un error');
-            throw $this->createNotFoundException('Error al crear el usuario');
-        }
+        // }else{
+        //     //$response = array('status'=> 500, 'msj' =>'Ha ocurrido un error');
+        //     throw $this->createNotFoundException('Error al crear el usuario');
+        // }
 
-        
+        return new JsonResponse(array());
 	}
 
     /**
