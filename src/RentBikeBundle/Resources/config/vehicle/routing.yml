@@ -1,0 +1,17 @@
+rent_bike_vehicle:
+    path:     /
+    defaults: { _controller: RentBikeBundle:Vehicle:resolveRoute }
+
+rent_bike_list_vehicle:
+    path:     /list
+    defaults: { _controller: RentBikeBundle:Vehicle:list}
+
+rent_bike_vehicle_id:
+    path:     /{id}
+    defaults: { _controller: RentBikeBundle:Vehicle:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_vehicle_update:
+    path:  /{id}
+    defaults: { _controller: RentBikeBundle:Vehicle:update }
+    methods:  [PUT]

@@ -23,6 +23,7 @@ class ClientRepository extends EntityRepository
 		$query = $query->getQuery();
 		$result = $query->getArrayResult();
 
+		echo "jajaja";
 		// $data = array();
 
 		// foreach ($result as $key => $r) {

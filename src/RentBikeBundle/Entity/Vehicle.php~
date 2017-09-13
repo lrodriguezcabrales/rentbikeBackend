@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Vehicle
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RentBikeBundle\Repository\VehicleRepository")
  * @ORM\Table(name="vehicle")
  */
 class Vehicle
@@ -21,7 +21,6 @@ class Vehicle
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $code;
 

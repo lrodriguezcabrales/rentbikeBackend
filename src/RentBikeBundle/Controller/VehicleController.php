@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use RentBikeBundle\Entity\AttributeList;
+use RentBikeBundle\Entity\Vehicle;
 
-class AttributeListController extends Controller
+class VehicleController extends Controller
 {
     public function indexAction()
     {
@@ -19,6 +19,7 @@ class AttributeListController extends Controller
 
     public function resolveRouteAction(Request $request)
     {
+
         $method = $request->getMethod();
 
         switch($method)
@@ -55,18 +56,16 @@ class AttributeListController extends Controller
         }
     }
 
-    /**
-     * Listar Usuarios
-     */
     public function listAction() 
 	{
-		$em = $this->get("doctrine")->getManager();
+		
+        $em = $this->get("doctrine")->getManager();
 
-		$query = $em->createQuery('SELECT u FROM RentBikeBundle:AttributeList u');
+        $repo = $this->getDoctrine()->getRepository('RentBikeBundle:Vehicle');
 
-        $data = $query->getArrayResult();   
+        $data = $repo->listVehicle();
 
-		return new JsonResponse(array('total' => count($data), 'data' => $data));
+        return new JsonResponse(array('total' => count($data), 'data' => $data));
 
 	}
 
@@ -75,8 +74,8 @@ class AttributeListController extends Controller
         $em = $this->get("doctrine")->getManager();
 
         if(!is_null($id)){
-            $query = $em->createQuery("SELECT u FROM RentBikeBundle:AttributeList u
-                WHERE u.id='".$id."'");
+            $query = $em->createQuery("SELECT c FROM RentBikeBundle:Client c
+                WHERE c.id='".$id."'");
         }
 
         $data = $query->getArrayResult();   
@@ -91,6 +90,7 @@ class AttributeListController extends Controller
 	 */
 	public function saveAction()
 	{
+
 		$em = $this->get("doctrine")->getManager();
 
 		$request = $this->container->get('request_stack')->getCurrentRequest();
@@ -101,48 +101,36 @@ class AttributeListController extends Controller
         //Obtenemos los datos que nos envia el cliente
         $data = $request->getContent();
         $data = json_decode($data, true);
+            
+        $vehicle = new Vehicle();
 
+        $vehicle->setName($data['name']);
+        $vehicle->setDescription($data['description']);
+        $vehicle->setAmount($data['amount']);
+        $vehicle->setNumAvailable($data['numAvailable']);
+        $vehicle->setNumBusy($data['numBusy']);
+        $vehicle->setPrice($data['price']);
 
-        $search = $em->getRepository('RentBikeBundle:AttributeList')->findOneBy(array('value'=>$data['value']));
+        
 
-        // echo "\nCount ".count($search)."\n";
+        $em->persist($vehicle);
+        $em->flush();
+        
+       
+        $search = $em->getRepository('RentBikeBundle:Vehicle')->findOneBy(array('code'=>$vehicle->getCode()));
 
-        if(count($search) > 0){
-           	$response = array('status'=> 200, 'msj' =>'Ya existe un atributo registrado con este valor');
-        }else{
-
-            try {
-                $attributeList = new AttributeList();
-                
-                $attributeList->setContent($data['content']);
-                $attributeList->setAttributeName($data['attributeName']);
-                $attributeList->setValue($data['value']);
-                
-                
-                $em->persist($attributeList);
-                $em->flush($attributeList);
-
-            } catch (\Exception $e) {
-                print $e->getMessage();
-            }
-
-        }
-	
-        $search = $em->getRepository('RentBikeBundle:AttributeList')->findOneBy(array('value'=>$data['value']));
-
-        // echo "\nCount ".count($search)."\n";
-
-        if(count($search) > 0){
-                        
-            $response = array('status'=> 200, 'msj' =>'Atributo creado exitosamente');
+        if($search){
+            
+            $response = array('status'=> 200, 'msj' =>'Vehiculo creado exitosamente');
             
             return new JsonResponse($response);
 
         }else{
             //$response = array('status'=> 500, 'msj' =>'Ha ocurrido un error');
-            throw $this->createNotFoundException('Error al crear el usuario');
+            throw $this->createNotFoundException('Error al crear vehiculo');
         }
 
+        
 	}
 
     /**
@@ -159,7 +147,7 @@ class AttributeListController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
 
-        $userSearch = $em->getRepository('RentBikeBundle:AttributeList')->find($id);
+        $userSearch = $em->getRepository('RentBikeBundle:User')->find($id);
 
         if($userSearch){
            

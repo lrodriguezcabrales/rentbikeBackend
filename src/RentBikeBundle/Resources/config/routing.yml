@@ -62,3 +62,41 @@ rent_bike_attributelist_update:
     defaults: { _controller: RentBikeBundle:AttributeList:update }
     methods:  [PUT]
 
+
+######## Vehicle
+rent_bike_vehicle:
+    path:     /vehicle
+    defaults: { _controller: RentBikeBundle:Vehicle:resolveRoute }
+
+rent_bike_list_vehicle:
+    path:     /vehicle/list
+    defaults: { _controller: RentBikeBundle:Vehicle:list}
+
+rent_bike_vehicle_id:
+    path:     /vehicle/{id}
+    defaults: { _controller: RentBikeBundle:Vehicle:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_vehicle_update:
+    path:  /vehicle/{id}
+    defaults: { _controller: RentBikeBundle:Vehicle:update }
+    methods:  [PUT]
+
+#Consecutive
+rent_bike_consecutive:
+    path:     /consecutive
+    defaults: { _controller: RentBikeBundle:Consecutive:resolveRoute }
+
+rent_bike_list_consecutive:
+    path:     /consecutive/list
+    defaults: { _controller: RentBikeBundle:Consecutive:list}
+
+rent_bike_consecutive_id:
+    path:     /consecutive/{id}
+    defaults: { _controller: RentBikeBundle:Consecutive:resolveRoute, id: null  }
+    methods:  [GET]
+
+rent_bike_consecutive_update:
+    path:  /consecutive/{id}
+    defaults: { _controller: RentBikeBundle:Consecutive:update }
+    methods:  [PUT]
