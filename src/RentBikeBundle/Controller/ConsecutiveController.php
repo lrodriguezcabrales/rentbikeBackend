@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use RentBikeBundle\Entity\Client;
+use RentBikeBundle\Entity\Consecutive;
 
 class ConsecutiveController extends Controller
 {
@@ -60,7 +60,9 @@ class ConsecutiveController extends Controller
 	{
 		$em = $this->get("doctrine")->getManager();
 
-        $data = $this->getDoctrine() ->getRepository(Client::class)->findAllOrderedByName();
+        $query = $em->createQuery("SELECT c FROM RentBikeBundle:Consecutive c");
+
+        $data = $query->getArrayResult();
 
         return new JsonResponse(array('total' => count($data), 'data' => $data));
 
@@ -98,6 +100,8 @@ class ConsecutiveController extends Controller
         //Obtenemos los datos que nos envia el cliente
         $data = $request->getContent();
         $data = json_decode($data, true);
+
+        print_r($data);
 
         $consecutive = new Consecutive();
 

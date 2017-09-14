@@ -81,7 +81,24 @@ class Vehicle
      */
     public function __construct()
     {
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
         $this->reserves = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist(){
+        $this->entrydate = new \DateTime();
+        $this->lastupdate = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(){
+        $this->lastupdate = new \DateTime();
     }
 
     /**

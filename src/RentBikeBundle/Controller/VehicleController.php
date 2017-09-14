@@ -102,27 +102,39 @@ class VehicleController extends Controller
         $data = $request->getContent();
         $data = json_decode($data, true);
             
-        $vehicle = new Vehicle();
+        $repoConsecutive = $em->getRepository('RentBikeBundle:Consecutive');
+        $repoAttributeList = $em->getRepository('RentBikeBundle:AttributeList');
 
+        $consecutive = $repoConsecutive->findOneBy(array('entity'=>'vehicle'));
+        $code = $consecutive->getConsecutive();
+        $code = $code + 1;
+
+        $state = $repoAttributeList->findOneBy(array('attributeName'=>'stateVehicle', 'value'=>'D'));
+
+        $vehicle = new Vehicle();
+        $vehicle->setCode($code);
         $vehicle->setName($data['name']);
         $vehicle->setDescription($data['description']);
         $vehicle->setAmount($data['amount']);
         $vehicle->setNumAvailable($data['numAvailable']);
         $vehicle->setNumBusy($data['numBusy']);
         $vehicle->setPrice($data['price']);
-
+        $vehicle->setState($state);
         
 
         $em->persist($vehicle);
         $em->flush();
-        
        
         $search = $em->getRepository('RentBikeBundle:Vehicle')->findOneBy(array('code'=>$vehicle->getCode()));
 
         if($search){
             
+            $consecutive->setConsecutive($code);
+            $em->flush();
+
             $response = array('status'=> 200, 'msj' =>'Vehiculo creado exitosamente');
             
+
             return new JsonResponse($response);
 
         }else{
